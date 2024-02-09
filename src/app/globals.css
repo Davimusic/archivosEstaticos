@@ -53,6 +53,12 @@ time, mark, audio, video {
 
 .marco{
   padding: 20px;
+  transition: padding 1s ease-in-out;
+}
+
+.sinMarco{
+  padding: 0;
+  transition: padding 1s ease-in-out;
 }
 
 
@@ -170,6 +176,30 @@ p {
   left: 0;
 }
 
+.imagenSubirArchivos{
+  background: white;
+  border-radius: 50%;
+  width: 60px;
+  height: 60px;
+  padding: 5px;
+  transition: 0.5s;
+  object-fit: cover;
+  margin-right: 5px;
+  margin-left: 5px;
+  background-size: 80%;
+  background-repeat: no-repeat; 
+  background-position: center;
+  display: inline-block;
+  margin: 10px;
+}
+
+.imagenSubirArchivos:hover{
+  background: #FFD700;
+  border-radius: 50%;
+  background-size: cover;
+  padding: 0px;
+  object-fit: cover;
+}
 
 
 
@@ -188,10 +218,11 @@ body {
   border: 1px solid #ffffffd0
 }
 
-.centrar{
+.centrar {
   display: flex;
   justify-content: center;
-  text-align: center
+  align-items: center;
+  text-align: center;
 }
 
 .adaptarAncho{

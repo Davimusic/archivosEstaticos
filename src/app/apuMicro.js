@@ -17,6 +17,7 @@ import { updateInfo } from "@/funciones/redux/actions";
 
 export function ApuMicro(){
     const [modalIsOpen, setModalIsOpen] = useState(false);
+    const [isMenuOpen, setIsMenuOpen] = useState(false);
     const [anoEnUso, setAnoEnUso] = useState('2024');                                   //comodin
     //const [tasks, setTasks] = useState({'cooooo':{'diasDuracion':1, 'accionAnteriorObligatoria': 'inicio'}, 'azzul':{'diasDuracion':2, 'accionAnteriorObligatoria': 'cooooo'}, 'davis': {'diasDuracion':4, 'accionAnteriorObligatoria': 'azzul'},  'otro': {'diasDuracion':4, 'diasDespuesDeInicioProyecto': '4'}});
     const [changeTask, setChangeTask] = useState({});
@@ -42,6 +43,11 @@ export function ApuMicro(){
         setTasks(newDicc);*/
     }, [changeTask]);
 
+    const handleMenuActivation = (isOpen) => {
+        setIsMenuOpen(isOpen)
+        console.log(isOpen ? 'El menú se ha abierto.' : 'El menú se ha cerrado.');
+    };
+
 
     return (
         <html>
@@ -56,11 +62,9 @@ export function ApuMicro(){
                 type="image/x-icon">
                 </link>
             </head>
-            <body className="imagenFondo marco" style={{height: '100vh'}}>
-                <Menu></Menu> 
-                <div style={{ wordWrap: 'break-word'}}>
-                    <GanttTable />
-                </div>
+            <body className={`imagenFondo ${isMenuOpen === false ? 'marco' : 'sinMarco' }`} style={{height: '100vh'}}>
+                <Menu onActivate={handleMenuActivation} />
+                <GanttTable />
             </body>
         </html>
     );

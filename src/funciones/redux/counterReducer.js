@@ -1,24 +1,14 @@
 const initialState = {
-  tasks: {
-  'cooooo':{'diasDuracion':1, 'accionAnteriorObligatoria': 'inicio'}, 
-  'azzul':{'diasDuracion':2, 'accionAnteriorObligatoria': 'inicio'}, 
-  'davis': {'diasDuracion':4, 'accionAnteriorObligatoria': 'cooooo'},  
-  'otro': {'diasDuracion':4, 'diasDespuesDeInicioProyecto': 4}},
-  objeto : {}, 
+  objetosAPU : [], 
   llavesProyectos: []
 };
 
 const counterReducer = (state = initialState, action) => {
   switch (action.type) {
-    case 'UPDATE_TASKS':
-        return {
-          ...state,
-          tasks: action.payload, 
-        };  
-    case 'UPDATE_OBJETO':
+    case 'UPDATE_OBJETOSAPU':
       return {
         ...state,
-        objeto: action.payload, 
+        objetosAPU: action.payload, 
       };
     case 'UPDATE_LLAVES_PROYECTOS':
       return {

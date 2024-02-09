@@ -1,13 +1,6 @@
-export const updateTasks = (value) => {
+export const updateObjetoAPU = (value) => {
     return {
-        type: 'UPDATE_TASKS',
-        payload: value,
-    };
-};
-
-export const updateObjeto = (value) => {
-    return {
-        type: 'UPDATE_OBJETO',
+        type: 'UPDATE_OBJETOSAPU',
         payload: value,
     };
 };

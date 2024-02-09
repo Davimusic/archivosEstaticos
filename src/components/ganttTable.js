@@ -1,20 +1,45 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import axios from 'axios';
+import MostrarInfo from "./mostrarInfo";
+import llamarTodoAPUObjeto from "@/funciones/conectoresBackend/llamarTodoAPUObjeto";
+import { CreateSelect } from "./selects";
+import decidirTipoDeArchivo from "@/funciones/decidirTipoDeArchivo";
 
+//redux
+import { useSelector } from 'react-redux';
+import { useDispatch } from 'react-redux';
+import { updateObjetoAPU, updateLlavesProyectos } from "@/funciones/redux/actions";
 
-export function GanttTable({}) {
+export function GanttTable() {
     const [selectedFile, setSelectedFile] = useState(null);
-    const [fechaInicio, setFechaInicio] = useState('enero1');
+    const [email, setEmail] = useState('davipianof@gmail.com');
     const [loading, setLoading] = useState(false);
     const [uploadSuccess, setUploadSuccess] = useState(false);
+    const [llaveProyectoEnUso, setLlaveProyectoEnUso] = useState('');
 
-    
+    //redux
+    const objetosAPU = useSelector(state => state.objetosAPU);
+    const llavesProyectos = useSelector(state => state.llavesProyectos);
+    const dispatch = useDispatch();
 
-    const uploadImage = async () => {
+    useEffect(() => {
+        llamarTodoAPUObjeto('davipianof@gmail.com')
+            .then(objetos => {
+                dispatch(updateObjetoAPU(objetos[0]))
+                dispatch(updateLlavesProyectos(Object.keys(objetos[0])))
+                setLlaveProyectoEnUso(Object.keys(objetos[0])[0])
+            })
+            .catch(error => {
+                console.error('Error:', error);
+            });
+    }, []);
+
+    const uploadFile = async () => {
         setLoading(true);
         const formData = new FormData();
         formData.append('file', selectedFile);
         formData.append('upload_preset', 'y8peecdo');
+        formData.append('folder', `${email}/${llaveProyectoEnUso}`);
 
         const res = await axios.post(
             `https://api.cloudinary.com/v1_1/dplncudbq/upload`,
@@ -26,11 +51,6 @@ export function GanttTable({}) {
         setLoading(false);
         setUploadSuccess(true);
         setSelectedFile(null);
-
-        // Abre el archivo cargado en una nueva pestaña o ventana del navegador
-        if (typeof window !== 'undefined') {
-            window.open(res.data.url, '_blank');
-        }
     };
 
     const handleFileChange = (e) => {
@@ -38,28 +58,48 @@ export function GanttTable({}) {
         setUploadSuccess(false);
     };
 
+    
     return (
-        <div>
-            <input type="file" onChange={handleFileChange} />
-            <button onClick={uploadImage} disabled={!selectedFile || loading}>Subir imagen</button>
-            {loading && <p>Cargando...</p>}
-            {uploadSuccess && <p>¡Archivo subido con éxito!</p>}
-            {selectedFile && <p>Archivo seleccionado: {selectedFile.name}</p>}
-            {selectedFile && selectedFile.type.startsWith('image/') && (
-                <img src={URL.createObjectURL(selectedFile)} alt="Previsualización" style={{maxWidth: '300px'}} />
-            )}
-            {selectedFile && selectedFile.type.startsWith('video/') && (
-                <video controls src={URL.createObjectURL(selectedFile)} style={{maxWidth: '300px'}} />
-            )}
-            {selectedFile && selectedFile.type.startsWith('audio/') && (
-                <audio controls src={URL.createObjectURL(selectedFile)} />
-            )}
-            {selectedFile && !selectedFile.type.startsWith('image/') && !selectedFile.type.startsWith('video/') && !selectedFile.type.startsWith('audio/') && (
-                <a href={URL.createObjectURL(selectedFile)} download>Descargar archivo seleccionado</a>
-            )}
-        </div>
+        <>
+            {llavesProyectos.length === 0 ? 
+                <div className="miContenedor">
+                    <div className="miCirculoGiratorio"></div>
+                </div>
+            : 
+                <div style={{height:'100%'}}>
+                    <div className="centrar" style={{display: 'block', height:'30%', background: 'black', paddingBottom: '20px'}}>
+                        <div className="" style={{display: 'flex', flexWrap: 'wrap', alignItems: 'center', justifyContent: 'space-around'}}>
+                            <MostrarInfo    informacion={'cargar archivo'} 
+                                            contenido={<label className="imagenSubirArchivos" style={{display: loading === true ? 'none' : 'flex', backgroundImage: 'url("https://res.cloudinary.com/dplncudbq/image/upload/v1706024045/crearNuevoObjeto_o9hw7f.png")'}}>
+                                                            <input type="file" onChange={handleFileChange} style={{display: 'none'}} />
+                                                        </label>}
+                                            width={65} height={65} style={{paddingBottom: '20px'}}/>
+                            <MostrarInfo    informacion={'subir archivo'} 
+                                            contenido={<button className="imagenSubirArchivos" style={{display: !selectedFile || loading ? 'none' : 'flex',  backgroundImage: 'url("https://res.cloudinary.com/dplncudbq/image/upload/v1706024045/save_pmx5wo.png")'}} onClick={uploadFile} ></button>}
+                                            width={65} height={65} tyle={{paddingBottom: '20px'}}/> 
+                            {llavesProyectos.length !== 0 ? 
+                                <CreateSelect 
+                                    name={'llaves'} 
+                                    value={llaveProyectoEnUso} 
+                                    options={llavesProyectos} 
+                                    event={(event) => setLlaveProyectoEnUso(event.target.value)}
+                                /> 
+                            : null }                               
+                        </div>                
+                        <div style={{marginTop: '20px'}}>
+                            {loading && <p>Cargando...</p>}
+                            {uploadSuccess && <p>¡Archivo subido con éxito!</p>}
+                            {selectedFile && <p>Archivo seleccionado: {selectedFile.name}. Guardar en proyecto: {llaveProyectoEnUso}</p>}
+                        </div>
+                    </div>
+                    <div className="centrar borde bordes color5" style={{height:'70%', display: 'flex', justifyContent: 'center', alignItems: 'center'}}>
+                        {selectedFile && (
+                            decidirTipoDeArchivo(selectedFile)
+                        )}
+                    </div>
+                </div>
+            }
+        </>
     );
 }
-
-
 

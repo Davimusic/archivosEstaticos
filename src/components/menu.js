@@ -8,23 +8,16 @@ import '../../src/app/globals.css'
 import llamarTodoObjetoMatematico from "@/funciones/conectoresBackend/llamarTodoObjetoMatematico";
 import { retornarLlavesValoresProcesados } from "@/funciones/conectoresBackend/retornarLlavesValoresProcesados";
 
-export function Menu(){
+export function Menu({ onActivate }){
     const router = useRouter();
     const dispatch = useDispatch();
     const [isOpen, setIsOpen] = useState(false);
 
     useEffect(() => {
-        /*llamarTodoObjetoMatematico().then(newObject => {
-            console.log('llega menu');
-            console.log(newObject);
-            if(newObject !== undefined){
-                let en = retornarLlavesValoresProcesados(newObject['objetos'][0])
-                console.log('entrega');
-                console.log(en);
-                dispatch(updateInfo(en))
-            }
-        });*/
     }, [router.asPath]);
+
+    
+
 
     const handleNavigation = (ruta) => {
         router.push(ruta);
@@ -32,7 +25,8 @@ export function Menu(){
     };
     
     function changeMenuState(){
-        setIsOpen(!isOpen)
+        setIsOpen(!isOpen);
+        onActivate(!isOpen);
     }
 
     return(
@@ -42,6 +36,11 @@ export function Menu(){
                 <div className='menuContent'>
                     <button onClick={() => handleNavigation('/about')}>Sobre nosotros</button>
                     <button onClick={() => handleNavigation('/')}>Inicio</button>
+                    <button onClick={() => {
+                        if (typeof window !== 'undefined') {
+                            window.location.href='https://apu-kappa.vercel.app/'
+                        }
+                    }}>Ir a página externa</button>
                 </div>
             )}
         </div>

@@ -34,13 +34,12 @@ export function Menu({ onActivate }){
             <img onClick={()=> changeMenuState()} className="imagenes" style={{margin: '5px'}} src="https://res.cloudinary.com/dplncudbq/image/upload/v1701542645/menu1_ui2fw4.png" alt="Descripción de la imagen" />
             {isOpen && (
                 <div className='menuContent'>
-                    <button onClick={() => handleNavigation('/about')}>Sobre nosotros</button>
-                    <button onClick={() => handleNavigation('/')}>Inicio</button>
-                    <button onClick={() => {
-                        if (typeof window !== 'undefined') {
-                            window.location.href='https://apu-kappa.vercel.app/'
-                        }
-                    }}>Ir a página externa</button>
+                    {typeof window !== 'undefined' ? 
+                        <>
+                            <button className="botones" onClick={() => {window.location.href='https://apu-kappa.vercel.app/'}}>APU</button>
+                            <button className="botones" onClick={() => {window.location.href='https://gannt-blush.vercel.app/'}}>GANNT</button>
+                        </>
+                    : null}
                 </div>
             )}
         </div>

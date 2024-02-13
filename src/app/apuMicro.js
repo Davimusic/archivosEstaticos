@@ -48,6 +48,23 @@ export function ApuMicro(){
         console.log(isOpen ? 'El menú se ha abierto.' : 'El menú se ha cerrado.');
     };
 
+    const [isOnline, setIsOnline] = useState(navigator.onLine);
+
+  useEffect(() => {
+    const onlineHandler = () => setIsOnline(true);
+    const offlineHandler = () => setIsOnline(false);
+
+    window.addEventListener('online', onlineHandler);
+    window.addEventListener('offline', offlineHandler);
+
+    return () => {
+      window.removeEventListener('online', onlineHandler);
+      window.removeEventListener('offline', offlineHandler);
+    };
+  }, []);
+
+
+
 
     return (
         <html>
@@ -62,9 +79,19 @@ export function ApuMicro(){
                 type="image/x-icon">
                 </link>
             </head>
-            <body className={`imagenFondo ${isMenuOpen === false ? 'marco' : 'sinMarco' }`} style={{height: '100vh'}}>
-                <Menu onActivate={handleMenuActivation} />
-                <GanttTable />
+            <body className={`imagenFondo ${isMenuOpen === false ? 'marco' : 'sinMarco' }`} style={{height: '100%'}}>
+                <div>
+                    {isOnline ? (
+                        <div>
+                            <Menu onActivate={handleMenuActivation} />
+                            <GanttTable />
+                        </div>
+                    ) : (
+                        <div style={{backgroundColor: '#0000009a', display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100vh' }}>
+                            <p>No hay conexión a Internet</p>
+                        </div>
+                    )}
+                </div>
             </body>
         </html>
     );

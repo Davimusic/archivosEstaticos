@@ -60,14 +60,14 @@ export function GanttTable() {
 
     
     return (
-        <>
+        <div style={{height:'100%'}}>
             {llavesProyectos.length === 0 ? 
                 <div className="miContenedor">
                     <div className="miCirculoGiratorio"></div>
                 </div>
             : 
-                <div style={{height:'100%'}}>
-                    <div className="centrar" style={{display: 'block', height:'30%', background: 'black', paddingBottom: '20px'}}>
+                <div >
+                    <div className="centrar" style={{display: 'block', height:'25%', background: 'black', paddingBottom: '5%'}}>
                         <div className="" style={{display: 'flex', flexWrap: 'wrap', alignItems: 'center', justifyContent: 'space-around'}}>
                             <MostrarInfo    informacion={'cargar archivo'} 
                                             contenido={<label className="imagenSubirArchivos" style={{display: loading === true ? 'none' : 'flex', backgroundImage: 'url("https://res.cloudinary.com/dplncudbq/image/upload/v1706024045/crearNuevoObjeto_o9hw7f.png")'}}>
@@ -92,14 +92,14 @@ export function GanttTable() {
                             {selectedFile && <p>Archivo seleccionado: {selectedFile.name}. Guardar en proyecto: {llaveProyectoEnUso}</p>}
                         </div>
                     </div>
-                    <div className="centrar borde bordes color5" style={{height:'70%', display: 'flex', justifyContent: 'center', alignItems: 'center'}}>
+                    <div className="centrar borde bordes color5" style={{height:'70vh', display: 'flex', justifyContent: 'center', alignItems: 'center'}}>
                         {selectedFile && (
                             decidirTipoDeArchivo(selectedFile)
                         )}
                     </div>
                 </div>
             }
-        </>
+        </div>
     );
 }
 
